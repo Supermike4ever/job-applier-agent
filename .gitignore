@@ -1,7 +1,7 @@
 # Environments
 venv/
 env/
-.env
+.env*
 
 # Python artifacts
 __pycache__/
