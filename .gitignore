@@ -1,0 +1,13 @@
+# Environments
+venv/
+env/
+.env
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Project specific
+data/
+assets/temp/
