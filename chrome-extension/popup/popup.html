@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartApply AI</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">SmartApply AI</span>
+      </div>
+      <span class="badge">Powered by Nova</span>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <button class="tab active" data-tab="profile">Profile</button>
+      <button class="tab" data-tab="apply">Apply</button>
+      <button class="tab" data-tab="cover">Cover Letter</button>
+    </div>
+
+    <!-- ========== Tab 1: Profile Setup ========== -->
+    <div class="tab-content active" id="tab-profile">
+      <!-- Resume Upload -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📄</span>
+          <span>Resume</span>
+        </div>
+        <div class="upload-area" id="resume-upload">
+          <div class="upload-placeholder" id="upload-placeholder">
+            <span class="upload-icon">⬆️</span>
+            <span>Drop your resume (PDF) or click to upload</span>
+          </div>
+          <div class="upload-success hidden" id="upload-success">
+            <span class="success-icon">✅</span>
+            <span id="resume-filename">resume.pdf</span>
+            <button class="btn-small btn-remove" id="remove-resume">✕</button>
+          </div>
+          <input type="file" id="resume-file" accept=".pdf,.docx" hidden>
+        </div>
+        <button class="btn btn-primary" id="parse-resume" disabled>
+          🔍 Parse with Nova AI
+        </button>
+        <div class="status-msg hidden" id="parse-status"></div>
+      </div>
+
+      <!-- Personal Info (auto-filled after resume parse, editable) -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">👤</span>
+          <span>Personal Info</span>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="first-name" placeholder="John">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="last-name" placeholder="Doe">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" id="phone" placeholder="+1 (555) 123-4567">
+          </div>
+          <div class="form-group full-width">
+            <label>Location</label>
+            <input type="text" id="location" placeholder="New York, NY">
+          </div>
+          <div class="form-group full-width">
+            <label>LinkedIn URL</label>
+            <input type="url" id="linkedin" placeholder="https://linkedin.com/in/johndoe">
+          </div>
+          <div class="form-group full-width">
+            <label>Portfolio / GitHub</label>
+            <input type="url" id="portfolio" placeholder="https://github.com/johndoe">
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Questions -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">❓</span>
+          <span>Common Questions</span>
+        </div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Work Authorization</label>
+            <select id="work-auth">
+              <option value="">Select...</option>
+              <option value="citizen">US Citizen</option>
+              <option value="green-card">Green Card</option>
+              <option value="h1b">H1B Visa</option>
+              <option value="opt">OPT/CPT</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label>Require Visa Sponsorship?</label>
+            <select id="visa-sponsor">
+              <option value="">Select...</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label>Years of Experience</label>
+            <input type="number" id="years-exp" placeholder="3" min="0" max="50">
+          </div>
+          <div class="form-group full-width">
+            <label>Expected Salary (USD)</label>
+            <input type="text" id="salary" placeholder="120,000">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="save-profile">
+        💾 Save Profile
+      </button>
+    </div>
+
+    <!-- ========== Tab 2: Apply (Auto-fill) ========== -->
+    <div class="tab-content" id="tab-apply">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🎯</span>
+          <span>Current Page</span>
+        </div>
+        <div class="page-info" id="page-info">
+          <div class="page-status" id="page-status">
+            <span class="status-dot detecting"></span>
+            <span>Detecting page...</span>
+          </div>
+          <div class="page-details hidden" id="page-details">
+            <div class="detail-row">
+              <span class="detail-label">Platform:</span>
+              <span class="detail-value" id="platform-name">-</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Company:</span>
+              <span class="detail-value" id="company-name">-</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Position:</span>
+              <span class="detail-value" id="position-name">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Match Score -->
+      <div class="section hidden" id="match-section">
+        <div class="section-header">
+          <span class="section-icon">📊</span>
+          <span>Match Analysis</span>
+        </div>
+        <div class="match-score">
+          <div class="score-circle">
+            <span class="score-number" id="match-score">--</span>
+            <span class="score-label">Match</span>
+          </div>
+          <div class="score-details">
+            <div class="score-item positive">
+              <span>✅ Strengths</span>
+              <p id="match-strengths">-</p>
+            </div>
+            <div class="score-item negative">
+              <span>⚠️ Gaps</span>
+              <p id="match-gaps">-</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="section">
+        <div class="action-buttons">
+          <button class="btn btn-secondary" id="analyze-jd" disabled>
+            🔍 Analyze Job
+          </button>
+          <button class="btn btn-primary" id="autofill-btn" disabled>
+            ⚡ Auto-Fill Application
+          </button>
+        </div>
+        <div class="status-msg hidden" id="fill-status"></div>
+      </div>
+    </div>
+
+    <!-- ========== Tab 3: Cover Letter ========== -->
+    <div class="tab-content" id="tab-cover">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">✍️</span>
+          <span>AI Cover Letter</span>
+        </div>
+        <p class="section-desc">Nova AI generates a cover letter tailored to this specific job posting and your resume.</p>
+        <button class="btn btn-primary" id="generate-cover">
+          ✨ Generate Cover Letter
+        </button>
+        <div class="cover-letter-output hidden" id="cover-output">
+          <textarea id="cover-text" rows="12" placeholder="Your AI-generated cover letter will appear here..."></textarea>
+          <div class="cover-actions">
+            <button class="btn btn-small btn-secondary" id="copy-cover">📋 Copy</button>
+            <button class="btn btn-small btn-secondary" id="regenerate-cover">🔄 Regenerate</button>
+            <button class="btn btn-small btn-primary" id="insert-cover">📥 Insert into Form</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keywords -->
+      <div class="section hidden" id="keywords-section">
+        <div class="section-header">
+          <span class="section-icon">🔑</span>
+          <span>JD Keywords Extracted</span>
+        </div>
+        <div class="keywords-list" id="keywords-list"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span>SmartApply AI v1.0</span>
+      <span>#AmazonNova</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

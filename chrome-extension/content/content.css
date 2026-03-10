@@ -1,0 +1,60 @@
+/* SmartApply AI - Content Script Styles */
+/* 这些样式会注入到 Greenhouse/Lever/Workday 页面中 */
+
+/* ===== 浮动按钮 (FAB) ===== */
+#smartapply-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #1A73E8, #4285F4);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.4);
+  z-index: 999999;
+  transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+}
+
+#smartapply-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(26, 115, 232, 0.5);
+}
+
+#smartapply-fab:active {
+  transform: scale(0.95);
+}
+
+/* ===== 浮动通知 ===== */
+#smartapply-notification {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  background: #1A1A2E;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  z-index: 999999;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  animation: smartapply-slide-in 0.3s ease-out;
+  max-width: 320px;
+}
+
+@keyframes smartapply-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
