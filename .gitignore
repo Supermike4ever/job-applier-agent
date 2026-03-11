@@ -1,7 +1,10 @@
 # Environments
 venv/
 env/
-.env*
+.env
+.env.local
+.env.*.local
+.envrc
 
 # Python artifacts
 __pycache__/
@@ -11,3 +14,5 @@ __pycache__/
 # Project specific
 data/
 assets/temp/
+
+dev-plan.md
